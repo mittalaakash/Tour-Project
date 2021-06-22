@@ -7,7 +7,7 @@ module.exports = class APIFeatures {
   filter() {
     //1A Filtering
     const queryObj = { ...this.queryString };
-    console.log(queryObj);
+    // console.log(queryObj);
     const excludeFields = ['sort', 'page', 'limit', 'fields'];
     excludeFields.forEach(el => delete queryObj[el]);
 
@@ -16,7 +16,7 @@ module.exports = class APIFeatures {
     queryStr = queryStr.replace(/\b(gt|gte|lt|lte)\b/g, match => `$${match}`);
 
     this.query.find(JSON.parse(queryStr));
-    console.log(JSON.parse(queryStr));
+    // console.log(JSON.parse(queryStr));
 
     return this;
   }
