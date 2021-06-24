@@ -8,8 +8,9 @@ const hpp = require('hpp');
 
 const AppError = require('./Utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
-const tourRouter = require(`${__dirname}/Routes/tourRoutes`);
-const userRouter = require(`${__dirname}/Routes/userRoutes`);
+const tourRouter = require(`./routes/tourRoutes`);
+const userRouter = require(`./routes/userRoutes`);
+const reviewRouter = require('./routes/reveiwRoutes');
 
 const app = express();
 
@@ -66,6 +67,7 @@ app.use((req, res, next) => {
 //using subrouter as middleware
 app.use('/api/v1/tours', tourRouter); //mounting router
 app.use('/api/v1/users', userRouter);
+app.use('/api/v1/reviews', reviewRouter);
 
 app.all('*', (req, res, next) => {
   // const err = new Error(`Can't find ${req.originalUrl} on this server!`);
