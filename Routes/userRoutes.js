@@ -6,29 +6,23 @@ const authController = require(`${__dirname}/../controllers/authController.js`);
 const router = express.Router();
 
 //Routes
-router.get(
-  '/me',
-  authController.protect,
-  userController.getMe,
-  userController.getUser,
-);
 
 router.post('/signup', authController.signup);
 router.post('/login', authController.login);
 
 router.post('/forgotpassword', authController.forgotPassword);
 router.patch('/resetpassword/:token', authController.resetPassword);
-router.patch(
-  '/updateMyPassword',
-  authController.protect,
-  authController.updatePassword,
-);
 
-router.patch('/updateme', authController.protect, userController.updateMe);
-router.delete('/deleteme', authController.protect, userController.deleteMe);
+router.use(authController.protect); //protect all routes after this middleware
+
+router.patch('/updateMyPassword', authController.updatePassword);
+router.get('/me', userController.getMe, userController.getUser);
+router.patch('/updateme', userController.updateMe);
+router.delete('/deleteme', userController.deleteMe);
+
+router.use(authController.restrictTo('admin')); //restricting all routes to admin after this middleware
 
 router.route('/').get(userController.getUsers);
-
 router
   .route('/:id')
   .get(userController.getUser)
