@@ -1,12 +1,15 @@
 const express = require('express');
 const tourController = require('./../controllers/tourController'); // we can do destructuring as well
 const authController = require('./../controllers/authController');
+const reviewRouter = require('./reveiwRoutes');
 
 const router = express.Router();
 
 // router.param('id', tourController.checkID); middleware
 
 //Routes
+router.use('/:tourID/reviews', reviewRouter);
+
 router
   .route('/top-5-cheap')
   .get(tourController.aliasTopTours, tourController.getAllTours);
