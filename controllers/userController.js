@@ -12,16 +12,7 @@ const filterObj = (obj, ...allowedFields) => {
 };
 
 // RouteHandlers
-exports.getUsers = catchAsync(async (req, res) => {
-  const users = await User.find();
-
-  res.status(200).json({
-    status: 'success',
-    requestedAt: req.requestTime,
-    results: users.length,
-    data: { users },
-  });
-});
+exports.getUsers = factory.getAll(User);
 
 exports.updateMe = catchAsync(async (req, res, next) => {
   //create error if user post password data
@@ -51,6 +42,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
 });
 
 exports.updateUser = factory.updateOne(User);
+
 exports.deleteMe = catchAsync(async (req, res, next) => {
   await User.findByIdAndUpdate(req.user.id, { active: false });
 
@@ -59,10 +51,7 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
     data: null,
   });
 });
-exports.getUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not defined',
-  });
-};
+
+exports.getUser = factory.getOne(User);
+
 exports.deleteUser = factory.deleteOne(User);
