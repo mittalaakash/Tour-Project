@@ -45,4 +45,4 @@ exports.getReview = catchAsync(async (req, res, next) => {
 
 exports.deleteReview = factory.deleteOne(Review);
 
-exports.updateReview = catchAsync(async (req, res, next) => {});
+exports.updateReview = factory.updateOne(Review);
