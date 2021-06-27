@@ -181,13 +181,12 @@ tourSchema.pre(/^find/, function (next) {
 });
 
 //Aggregation MW
-tourSchema.pre('aggregate', function (next) {
-  // console.log(this.pipeline());
-  this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
-  // console.log(this.pipeline());
-
-  next();
-});
+// tourSchema.pre('aggregate', function (next) {
+// console.log(this.pipeline());
+// this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
+// console.log(this.pipeline());
+//   next();
+// });
 
 module.exports = mongoose.model('Tour', tourSchema);
 
