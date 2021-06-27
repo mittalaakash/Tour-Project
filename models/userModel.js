@@ -49,6 +49,8 @@ const userSchema = new mongoose.Schema({
   },
 });
 
+//instance methods available on every document
+
 userSchema.methods.correctPassword = async function (
   candidatePassword,
   userPassword,

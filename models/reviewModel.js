@@ -47,7 +47,7 @@ reviewSchema.pre(/^find/, function (next) {
   next();
 });
 
-//static method
+//static method can be called on Model
 reviewSchema.statics.calcAverageRatings = async function (tourId) {
   const stats = await this.aggregate([
     {
