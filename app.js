@@ -21,7 +21,11 @@ app.set('views', path.join(__dirname, 'views'));
 
 //1 Global Middlewares
 //set security http headers
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+  }),
+);
 
 //development logging
 if (process.env.NODE_ENV === 'development') {
