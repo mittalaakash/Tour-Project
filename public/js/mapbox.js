@@ -28,7 +28,7 @@ locations.forEach(loc => {
     .addTo(map);
 
   //add popup
-  new mapboxgl.Popup({ offset: 30 })
+  new mapboxgl.Popup({ offset: 30, closeOnClick: false })
     .setLngLat(loc.coordinates)
     .setHTML(`<p>Day ${loc.day}: ${loc.description}</p>`)
     .addTo(map);
