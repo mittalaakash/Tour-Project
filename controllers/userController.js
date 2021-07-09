@@ -1,7 +1,28 @@
+const multer = require('multer');
 const User = require('../models/userModel');
 const AppError = require('../Utils/appError');
 const catchAsync = require('../Utils/catchAsync');
 const factory = require('../controllers/handlerFactory');
+
+const multerStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'public/img/users');
+  },
+  filename: (req, file, cb) => {
+    // formate: user-{{userID}}-{{timestamp}}
+    const ext = file.mimetype.split('/')[1];
+    cb(null, `user-${req.user.id}-${Date.now()}.${ext}`);
+  },
+});
+
+const multerFiler = (req, file, cb) => {
+  if (file.mimetype.startsWith('image')) cb(null, true);
+  else cb(new AppError('Not an image! Please upload only images.', 400), false);
+};
+
+const upload = multer({ storage: multerStorage, fileFilter: multerFiler });
+
+exports.uploadUserPhoto = upload.single('photo');
 
 const filterObj = (obj, ...allowedFields) => {
   const newObj = {};
@@ -20,8 +41,6 @@ exports.getMe = (req, res, next) => {
 exports.getUsers = factory.getAll(User);
 
 exports.updateMe = catchAsync(async (req, res, next) => {
-  console.log(req.file);
-  console.log(req.body);
   //create error if user post password data
   if (req.body.password || req.body.passwordConfirm) {
     return next(
@@ -31,6 +50,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
       ),
     );
   }
+
   //filter out unwanted field names that are not allowed to be udpated
   const filteredBody = filterObj(req.body, 'name', 'email');
 
