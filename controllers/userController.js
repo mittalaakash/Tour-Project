@@ -4,6 +4,7 @@ const AppError = require('../Utils/appError');
 const catchAsync = require('../Utils/catchAsync');
 const factory = require('../controllers/handlerFactory');
 
+//set storage location and filename
 const multerStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, 'public/img/users');
@@ -15,6 +16,7 @@ const multerStorage = multer.diskStorage({
   },
 });
 
+//set filter to upload only images
 const multerFiler = (req, file, cb) => {
   if (file.mimetype.startsWith('image')) cb(null, true);
   else cb(new AppError('Not an image! Please upload only images.', 400), false);
@@ -22,7 +24,7 @@ const multerFiler = (req, file, cb) => {
 
 const upload = multer({ storage: multerStorage, fileFilter: multerFiler });
 
-exports.uploadUserPhoto = upload.single('photo');
+exports.uploadUserPhoto = upload.single('photo'); // upload single photo
 
 const filterObj = (obj, ...allowedFields) => {
   const newObj = {};
