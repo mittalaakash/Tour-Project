@@ -1,20 +1,24 @@
 const multer = require('multer');
+const sharp = require('sharp');
 const User = require('../models/userModel');
 const AppError = require('../Utils/appError');
 const catchAsync = require('../Utils/catchAsync');
 const factory = require('../controllers/handlerFactory');
 
-//set storage location and filename
-const multerStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'public/img/users');
-  },
-  filename: (req, file, cb) => {
-    // formate: user-{{userID}}-{{timestamp}}
-    const ext = file.mimetype.split('/')[1];
-    cb(null, `user-${req.user.id}-${Date.now()}.${ext}`);
-  },
-});
+//set storage location and filename (used when no image processing is required)
+// const multerStorage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, 'public/img/users');
+//   },
+//   filename: (req, file, cb) => {
+//     // formate: user-{{userID}}-{{timestamp}}
+//     const ext = file.mimetype.split('/')[1];
+//     cb(null, `user-${req.user.id}-${Date.now()}.${ext}`);
+//   },
+// });
+
+//used when image processing is required right after the image is uploaded
+const multerStorage = multer.memoryStorage();
 
 //set filter to upload only images
 const multerFiler = (req, file, cb) => {
@@ -25,6 +29,19 @@ const multerFiler = (req, file, cb) => {
 const upload = multer({ storage: multerStorage, fileFilter: multerFiler });
 
 exports.uploadUserPhoto = upload.single('photo'); // upload single photo
+
+exports.resizeUserPhoto = (req, res, next) => {
+  if (!req.file) next();
+  req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`;
+
+  sharp(req.file.buffer)
+    .resize(500, 500)
+    .toFormat('jpeg')
+    .jpeg({ quality: 90 })
+    .toFile(`public/img/users/${req.file.filename}`);
+
+  next();
+};
 
 const filterObj = (obj, ...allowedFields) => {
   const newObj = {};
