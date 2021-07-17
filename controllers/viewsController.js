@@ -45,6 +45,7 @@ exports.getAccount = (req, res) => {
   });
 };
 
+exports.getMyTour = (req, res, next) => {};
 exports.updateUserData = catchAsync(async (req, res, next) => {
   const updatedUser = await User.findByIdAndUpdate(
     req.user.id,
