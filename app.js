@@ -8,6 +8,7 @@ const xss = require('xss-clean');
 const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
 const compression = require('compression');
+const cors = require('cors');
 
 const AppError = require('./Utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -25,6 +26,13 @@ app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
 //1 Global Middlewares
+//implement CORS
+app.use(cors());
+//Access-Control-Allow-Origin *
+
+app.options('*', cors());
+// app.options('/api/v1/tours/:id', cors());
+
 //set security http headers
 app.use(
   helmet({
