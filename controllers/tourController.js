@@ -1,8 +1,8 @@
 const multer = require('multer');
 const sharp = require('sharp');
 const Tour = require('../models/tourModel');
-const catchAsync = require('../utils/catchAsync');
-const AppError = require('../utils/appError');
+const catchAsync = require('../Utils/catchAsync');
+const AppError = require('../Utils/appError');
 const factory = require('../controllers/handlerFactory');
 
 //used when image processing is required right after the image is uploaded
